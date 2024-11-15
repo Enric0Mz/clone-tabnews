@@ -1,5 +1,5 @@
 function Home() {
-  return <h1>Luizza, eu te amo. Se voce me ama, da uma risadinha</h1>;
+  return <h1>Marceline, Juan eu amo vcs. Se voce me ama, da uma risadinha</h1>;
 }
 
 function teste() {
