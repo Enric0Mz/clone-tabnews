@@ -29,3 +29,17 @@ test("POST to /api/v1/migrations should return 200", async () => {
   expect(Array.isArray(response2Body)).toBe(true);
   expect(response2Body.length).toBe(0);
 });
+
+test("Any request other than GET/POST to /api/v1/migrations should return method not implemented - 501 error", async () => {
+  const response1 = await fetch("http://localhost:3000/api/v1/migrations", {
+    method: "DELETE",
+  });
+  const response2 = await fetch("http://localhost:3000/api/v1/migrations", {
+    method: "PUT",
+  });
+
+  console.log(response1.statusText);
+
+  expect(response1.status).toBe(501);
+  expect(response2.status).toBe(501);
+});
