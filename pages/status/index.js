@@ -11,7 +11,7 @@ export default function statusPage() {
     <>
       <h1>Status</h1>
       <UpdatedAt />
-      <Database />
+      <DatabaseStatus />
     </>
   );
 }
@@ -29,7 +29,7 @@ function UpdatedAt() {
   return <div>Última atualização: {updatedAtText}</div>;
 }
 
-function Database() {
+function DatabaseStatus() {
   const { isLoading, data } = useSWR("/api/v1/status", fetchAPI, {
     refreshInterval: 2000,
   });
