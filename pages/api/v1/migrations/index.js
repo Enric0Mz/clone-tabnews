@@ -2,8 +2,7 @@ import migrationRunner from "node-pg-migrate";
 import { resolve } from "node:path";
 import database from "infra/database.js";
 import { createRouter } from "next-connect";
-import controller from "infra/controller.js"
-
+import controller from "infra/controller.js";
 
 const router = createRouter();
 
@@ -11,9 +10,7 @@ router.get(getHandler);
 
 router.post(postHandler);
 
-export default router.handler(
-  controller.errorHandlers
-);
+export default router.handler(controller.errorHandlers);
 
 const migrationOptions = {
   dryRun: true,

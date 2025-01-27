@@ -6,10 +6,7 @@ const router = createRouter();
 
 router.get(getHandler);
 
-export default router.handler(
- controller.errorHandlers
-);
-
+export default router.handler(controller.errorHandlers);
 
 async function getHandler(request, response) {
   const databaseVersionResult = await database.query("SHOW server_version;");
