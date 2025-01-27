@@ -2,8 +2,8 @@ import migrationRunner from "node-pg-migrate";
 import { resolve } from "node:path";
 import database from "infra/database.js";
 import { createRouter } from "next-connect";
-import { onNoMatchHandler } from "helpers/handlers";
-import { InternalServerError } from "infra/errors";
+import controller from "infra/controller.js"
+
 
 const router = createRouter();
 
@@ -11,17 +11,9 @@ router.get(getHandler);
 
 router.post(postHandler);
 
-export default router.handler({
-  onNoMatch: onNoMatchHandler,
-  onError: onErrorHandler,
-});
-
-async function onErrorHandler(error, request, response) {
-  const publicErrorObject = new InternalServerError({
-    cause: error,
-  });
-  response.status(500).json(publicErrorObject);
-}
+export default router.handler(
+  controller.errorHandlers
+);
 
 const migrationOptions = {
   dryRun: true,

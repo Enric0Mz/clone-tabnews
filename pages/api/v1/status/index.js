@@ -1,24 +1,15 @@
 import database from "infra/database.js";
-import { InternalServerError } from "infra/errors";
 import { createRouter } from "next-connect";
-import { onNoMatchHandler } from "helpers/handlers";
+import controller from "infra/controller.js";
 
 const router = createRouter();
 
 router.get(getHandler);
 
-export default router.handler({
-  onNoMatch: onNoMatchHandler,
-  onError: onErrorHandler,
-});
+export default router.handler(
+ controller.errorHandlers
+);
 
-function onErrorHandler(error, request, response) {
-  const publicErrorObject = new InternalServerError({
-    cause: error,
-  });
-  console.log("Erro no handler do next-connect");
-  response.status(500).json(publicErrorObject);
-}
 
 async function getHandler(request, response) {
   const databaseVersionResult = await database.query("SHOW server_version;");
