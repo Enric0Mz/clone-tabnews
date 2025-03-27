@@ -53,3 +53,42 @@ export class MethodNotAllowedError extends Error {
     };
   }
 }
+
+export class ValidationError extends Error {
+  constructor({ cause, message, action }) {
+    super(message || "Um erro de validacao ocorreu.", {
+      cause,
+    });
+    this.name = "ValidationError";
+    this.action = action || "Ajuste ops dados enviados e tente novamente.";
+    this.statusCode = 400;
+  }
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      action: this.action,
+      status_code: this.statusCode,
+    };
+  }
+}
+
+export class NotFoundError extends Error {
+  constructor({ cause, message, action }) {
+    super(message || "Nao foi possivel encontrar esse recurso no sistema.", {
+      cause,
+    });
+    this.name = "NotFoundError";
+    this.action =
+      action || "Verifique se os parametros enviados na consulta estao certos.";
+    this.statusCode = 404;
+  }
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      action: this.action,
+      status_code: this.statusCode,
+    };
+  }
+}
