@@ -75,7 +75,6 @@ async function update(username, userInputValues) {
     await hashPasswordInObject(userInputValues);
   }
 
-  console.log(currentUser);
   const userWithNewValues = { ...currentUser, ...userInputValues };
 
   return await runUpdateQuery(userWithNewValues);
