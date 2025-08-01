@@ -1,6 +1,6 @@
-import { getNamedMiddlewareRegex } from "next/dist/shared/lib/router/utils/route-regex";
 import orchestrator from "tests/orchestrator.js";
 import { version as uuidVersion } from "uuid";
+import session from "models/session.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
@@ -47,6 +47,36 @@ describe("GET /api/v1/user", () => {
       const response = await fetch("http://localhost:3000/api/v1/user", {
         headers: {
           Cookie: `session_id=${nonexistentToken}`,
+        },
+      });
+
+      expect(response.status).toBe(401);
+
+      const responseBody = await response.json();
+
+      expect(responseBody).toEqual({
+        name: "UnauthorizedError",
+        message: "Usuario nao possui sessao ativa.",
+        action: "Verifique se este usuario esta logado e tente novamente",
+        status_code: 401,
+      });
+    });
+    test("With expired session", async () => {
+      jest.useFakeTimers({
+        now: new Date(Date.now() - session.EXPIRATION_IN_MILLISECONDS),
+      });
+
+      const createdUser = await orchestrator.createUser({
+        username: "UserWithExpiredSession",
+      });
+
+      const sessionObject = await orchestrator.createSession(createdUser.id);
+
+      jest.useRealTimers();
+
+      const response = await fetch("http://localhost:3000/api/v1/user", {
+        headers: {
+          Cookie: `session_id=${sessionObject.token}`,
         },
       });
 
